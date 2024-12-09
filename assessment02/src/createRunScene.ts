@@ -1,4 +1,4 @@
-import { AbstractMesh, ActionManager, CubeTexture, SceneLoader } from "@babylonjs/core";
+import { AbstractMesh, ActionManager, CubeTexture, Mesh, _ENVTextureLoader } from "@babylonjs/core";
 import { SceneData } from "./interfaces ";
 import {
   keyActionManager,
@@ -6,13 +6,16 @@ import {
   keyDownHeld,
   getKeyDown,
 } from "./keyActionManager";
+import { characterActionManager } from "./characterActionManager";
 
+import "@babylonjs/core/Materials/Textures/Loaders/envTextureLoader";
+import "@babylonjs/core/Helpers/sceneHelpers";
 export default function createRunScene(runScene: SceneData) {
   runScene.scene.actionManager = new ActionManager(runScene.scene);
   keyActionManager(runScene.scene);
 
   const environmentTexture = new CubeTexture(
-    "assets/textures/skybox/skybox_pz.jpg",
+    "assets/textures/industrialSky.env",
     runScene.scene
   );
   const skybox = runScene.scene.createDefaultSkybox(
@@ -21,31 +24,46 @@ export default function createRunScene(runScene: SceneData) {
     10000,
     0.1
   );
+  runScene.audio.stop();
+  runScene.scene.onBeforeRenderObservable.add(() => {
+    // check and respond to keypad presses
 
-  let keyDownMap: any[] = [];
-function importPlayerMesh(scene, x: number, y: number) {
-let item = SceneLoader.ImportMesh("", "./models/", "dummy3.babylon", scene,
-function(newMeshes) {
-let mesh = newMeshes[0];
-scene.onBeforeRenderObservable.add(()=> {
-if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
-mesh.position.z += 0.1;
-mesh.rotation.y = 0;
-}
-if (keyDownMap["a"] || keyDownMap["ArrowLeft"]) {
-mesh.position.x -= 0.1;
-mesh.rotation.y = 3 * Math.PI / 2;
-}
-if (keyDownMap["s"] || keyDownMap["ArrowDown"]) {
-mesh.position.z -= 0.1;
-mesh.rotation.y = 2 * Math.PI / 2;
-}
-if (keyDownMap["d"] || keyDownMap["ArrowRight"]) {
-mesh.position.x += 0.1;
-mesh.rotation.y = Math.PI / 2;
-}
-});
-});
-return item;
-}
+    if (getKeyDown() == 1 && (keyDownMap["m"] || keyDownMap["M"])) {
+      keyDownHeld();
+      if (runScene.audio.isPlaying) {
+        runScene.audio.stop();
+      } else {
+        runScene.audio.play();
+      }
+    }
+
+    runScene.player.then((result) => {
+      let character: AbstractMesh = result!.meshes[0];
+      if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
+        character.position.x -= 0.1;
+        character.rotation.y = (3 * Math.PI) / 2;
+      }
+      if (keyDownMap["a"] || keyDownMap["ArrowLeft"]) {
+        character.position.z -= 0.1;
+        character.rotation.y = (2 * Math.PI) / 2;
+      }
+      if (keyDownMap["s"] || keyDownMap["ArrowDown"]) {
+        character.position.x += 0.1;
+        character.rotation.y = (1 * Math.PI) / 2;
+      }
+      if (keyDownMap["d"] || keyDownMap["ArrowRight"]) {
+        character.position.z += 0.1;
+        character.rotation.y = (0 * Math.PI) / 2;
+      }
+    });
+  });
+
+// add incremental action to player
+  runScene.player.then((result) => {  
+    let characterMesh = result!.meshes[0];
+    characterActionManager(runScene.scene, characterMesh as Mesh);
+  });
+
+  runScene.scene.onAfterRenderObservable.add(() => {});
+  
 }

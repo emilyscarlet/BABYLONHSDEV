@@ -127,11 +127,22 @@ function createBox2(scene: Scene) {
 }
 
 
-function importPlayerMesh(scene, x: number, y: number) {
-  let item = SceneLoader.ImportMesh("", "./models/", "dummy3.babylon", scene,
-      function(newMeshes) {
-          let mesh = newMeshes[0];
-      });
+function importMeshA(scene: Scene, x: number, y: number) {
+  let item: Promise<void | ISceneLoaderAsyncResult> =
+    SceneLoader.ImportMeshAsync(
+      "",
+      "./assets/models/men/",
+      "dummy3.babylon",
+      scene
+    );
+
+  item.then((result) => {
+    let character: AbstractMesh = result!.meshes[0];
+    character.position.x = x;
+    character.position.y = y + 0.1;
+    character.scaling = new Vector3(1, 1, 1);
+    character.rotation = new Vector3(0, 1.5, 0);
+  });
   return item;
 }
 
@@ -143,7 +154,7 @@ export default function createStartScene(engine: Engine) {
   let camera = createArcRotateCamera(scene);
   let box1 = createBox1(scene);
   let box2 = createBox2(scene);
-  let player = importPlayerMesh(scene, 0, 0);
+  let player = importMeshA(scene, 0, 0);
   let ground = createGround(scene);
 
   let that: SceneData = {
