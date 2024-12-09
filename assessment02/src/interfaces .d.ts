@@ -6,9 +6,11 @@ import {
   Camera,
   ISceneLoaderAsyncResult,
 } from "@babylonjs/core";
+import { ThinTAAPostProcess } from "@babylonjs/core/PostProcesses/thinTAAPostProcess";
 
 export interface SceneData {
   scene: Scene;
+  importMesh?: any;
   audio: Sound;
   lightHemispheric: HemisphericLight;
   camera: Camera;
@@ -17,3 +19,5 @@ export interface SceneData {
   player: Promise<void | ISceneLoaderAsyncResult>;
   ground: Mesh;
 }
+
+that.importMesh = importPlayerMesh(that.scene, 0.0);

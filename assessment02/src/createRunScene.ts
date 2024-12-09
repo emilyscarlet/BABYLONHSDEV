@@ -1,4 +1,4 @@
-import { AbstractMesh, ActionManager, CubeTexture } from "@babylonjs/core";
+import { AbstractMesh, ActionManager, CubeTexture, SceneLoader } from "@babylonjs/core";
 import { SceneData } from "./interfaces ";
 import {
   keyActionManager,
@@ -22,38 +22,30 @@ export default function createRunScene(runScene: SceneData) {
     0.1
   );
 
-  runScene.audio.stop();
-  runScene.scene.onBeforeRenderObservable.add(() => {
-    // check and respond to keypad presses
-
-    if (getKeyDown() == 1 && (keyDownMap["m"] || keyDownMap["M"])) {
-      keyDownHeld();
-      if (runScene.audio.isPlaying) {
-        runScene.audio.stop();
-      } else {
-        runScene.audio.play();
-      }
-    }
-
-    runScene.player.then((result) => {
-      let character: AbstractMesh = result!.meshes[0];
-      if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
-        character.position.x -= 0.1;
-        character.rotation.y = (3 * Math.PI) / 2;
-      }
-      if (keyDownMap["a"] || keyDownMap["ArrowLeft"]) {
-        character.position.z -= 0.1;
-        character.rotation.y = (2 * Math.PI) / 2;
-      }
-      if (keyDownMap["s"] || keyDownMap["ArrowDown"]) {
-        character.position.x += 0.1;
-        character.rotation.y = (1 * Math.PI) / 2;
-      }
-      if (keyDownMap["d"] || keyDownMap["ArrowRight"]) {
-        character.position.z += 0.1;
-        character.rotation.y = (0 * Math.PI) / 2;
-      }
-    });
-  });
-  runScene.scene.onAfterRenderObservable.add(() => {});
+  let keyDownMap: any[] = [];
+function importPlayerMesh(scene, x: number, y: number) {
+let item = SceneLoader.ImportMesh("", "./models/", "dummy3.babylon", scene,
+function(newMeshes) {
+let mesh = newMeshes[0];
+scene.onBeforeRenderObservable.add(()=> {
+if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
+mesh.position.z += 0.1;
+mesh.rotation.y = 0;
+}
+if (keyDownMap["a"] || keyDownMap["ArrowLeft"]) {
+mesh.position.x -= 0.1;
+mesh.rotation.y = 3 * Math.PI / 2;
+}
+if (keyDownMap["s"] || keyDownMap["ArrowDown"]) {
+mesh.position.z -= 0.1;
+mesh.rotation.y = 2 * Math.PI / 2;
+}
+if (keyDownMap["d"] || keyDownMap["ArrowRight"]) {
+mesh.position.x += 0.1;
+mesh.rotation.y = Math.PI / 2;
+}
+});
+});
+return item;
+}
 }
