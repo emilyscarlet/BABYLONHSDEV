@@ -6,8 +6,8 @@
   
   "scripts": {
     "dev": "vite --host",
-    "collision03build": "vite build collision03v2",
-    "collision03preview": "vite preview collision03v2 --host"
+    "assessment02build": "vite build assessment02build",
+    "assessment0preview": "vite preview assessment02preview --host"
   },
   "devDependencies": {
     "typescript": "~5.6.2",
