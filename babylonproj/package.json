@@ -1,0 +1,29 @@
+{
+  "name": "testproj",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  
+  "scripts": {
+    "dev": "vite --host",
+    "element1build": "vite build element1",
+    "element1preview": "vite preview element1 --host",
+
+     "element2build": "vite build element2",
+    "element2preview": "vite preview element2 --host",
+
+     "element3build": "vite build element3",
+    "element3preview": "vite preview element3 --host",
+
+     "element4build": "vite build element4",
+    "element4preview": "vite preview element4 --host",
+
+     "element5build": "vite build element5",
+    "element5preview": "vite preview element5 --host"
+
+  },
+  "devDependencies": {
+    "typescript": "~5.6.2",
+    "vite": "^5.4.10"
+  }
+}
