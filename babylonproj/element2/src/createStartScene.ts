@@ -126,6 +126,32 @@ function createTerrain(scene: Scene) {
     return roof;
   }
 
+  function createCar(scene: Scene) {
+    const spriteManagerTrees = new SpriteManager(
+      "carManager",
+      "./assets/textures/car.png",
+      2000,
+      { width: 512, height: 1024 },
+      scene
+    );
+  
+    //We create trees at random positions
+    for (let i = 0; i < 500; i++) {
+      const tree: Sprite = new Sprite("car", spriteManagerTrees);
+      tree.position.x = Math.random() * -30;
+      tree.position.z = Math.random() * 20 + 8;
+      tree.position.y = 0.2;
+    }
+  
+    for (let i = 0; i < 500; i++) {
+      const tree = new Sprite("car", spriteManagerTrees);
+      tree.position.x = Math.random() * 25 + 7;
+      tree.position.z = Math.random() * -35 + 8;
+      tree.position.y = 0.2;
+    }
+    // nothing returned by this function
+  }
+    
   function createHouse(scene: Scene, style: number) {
     const box = createBox(style);
     const roof = createRoof(style);
@@ -267,6 +293,7 @@ function createTerrain(scene: Scene) {
     let scene   = new Scene(engine);
     let ground  = createGround(scene);
     let sky     = createSky(scene);
+    let car     = createCar(scene);
     let lightHemispheric = createHemisphericLight(scene);
     createHouses(scene, 3);
     createTrees(scene);
