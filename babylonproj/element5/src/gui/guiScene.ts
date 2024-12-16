@@ -108,6 +108,8 @@ import {
     let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI", true);
     var button1 = createSceneButton(scene,"but1", "1",1,"-150px", "120px", advancedTexture);
     var button2 = createSceneButton(scene,"but2", "2", 2,"-50px", "120px", advancedTexture);
+    var button3 = createSceneButton(scene,"but2", "2", 2,"-50px", "120px", advancedTexture);
+    var button4 = createSceneButton(scene,"but2", "2", 2,"-50px", "120px", advancedTexture);
     var camera = createArcRotateCamera(scene);
 
  
